@@ -1,0 +1,12 @@
+seed: 42
+
+name: 'unet'
+
+train: '../data/converted/train'
+val: '../data/converted/val'
+test: '../data/converted/test'
+checkpoint_dir: '../logs/unet'
+
+
+epochs: 40
+batch_size: 23
