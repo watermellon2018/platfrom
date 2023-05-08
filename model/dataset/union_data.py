@@ -25,7 +25,7 @@ def union(mode):
     print(df.shape)
     df = df.sample(frac=1)
 
-    df.to_csv('../data/data.csv', index=False)
+    df.to_csv('../data/{}/data.csv'.format(mode), index=False)
 
 
 if __name__ == '__main__':
