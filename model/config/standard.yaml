@@ -8,5 +8,5 @@ test: '../data/converted/test'
 checkpoint_dir: '../logs/unet'
 
 
-epochs: 40
+epochs: 20
 batch_size: 23

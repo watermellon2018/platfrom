@@ -1,4 +1,8 @@
+model/lightning_logs/
+model/data/
+pnoumonia/
 recognizeCTLung/
+cancerLung/
 .idea/
 *.iml
 **/__pycache__

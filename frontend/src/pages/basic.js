@@ -1,38 +1,28 @@
-import { Layout, Button } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {Button, Layout} from 'antd';
 import '../App.css';
 import withAuth from '../components/check_auth'
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
-
-import { Link } from 'react-router-dom';
 import Sidebar from '../components/sidebar'
-import {UserOutlined, BugOutlined} from "@ant-design/icons";
+import {BugOutlined, UserOutlined} from "@ant-design/icons";
 
 import './basic.css'
-import LandingPage from "./start";
-
-
-// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
+import {useLayoutEffect} from "react";
+import {registerApplication, start} from 'single-spa';
 
 const { Header, Content } = Layout;
 
 const BasicPage = (props) => {
+
     const navigate = useNavigate();
     const handleLogout = () => {
-        // if (localStorage.getItem('token')){
         Cookies.remove('token');
-
-        //     localStorage.removeItem('token');
-            navigate('/start')
-        // }
-
+        navigate('/start')
     };
+
 
     return (
         <>
-            {/*{Cookies.get('token')} ?*/}
             <Header className="header">
                 <div className='logo'>
                     <Link to='/' className="profile-button" style={{color: 'white'}}>
@@ -44,9 +34,7 @@ const BasicPage = (props) => {
                     <Link to='/profile' className="profile-button" style={{color: 'white'}}>
                         <UserOutlined />
                     </Link>
-                    {/*<Link to='/'>*/}
                     <Button type="primary" key='login' onClick={handleLogout}>Выйти</Button>
-                    {/*</Link>*/}
                 </div>
 
             </Header>
@@ -69,7 +57,6 @@ const BasicPage = (props) => {
                     </Content>
                 </Layout>
             </Layout>
-            {/*{navigate('/start')}*/}
         </>
     );
 }

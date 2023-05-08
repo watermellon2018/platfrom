@@ -24,12 +24,17 @@ from tqdm import tqdm
 class LungDataset(Dataset):
 
     def __init__(self, path_dir, transform=None, seed=42):
+        # self.COUNT_BAD = 5
+        # self.COUNT_GOOD = 1
+
         self.scans_dir = os.path.join(path_dir, 'scans')
         self.masks_dir = os.path.join(path_dir, 'masks')
         self.img_size = 256
         good_lung_names, bad_lung_names = self.get_good_lung()
+        bad_lung_names = bad_lung_names[0:50]
+        good_lung_names = good_lung_names[0:10]
         self.paths = good_lung_names + bad_lung_names
-        self.paths = bad_lung_names
+        # self.paths = bad_lung_names # TODO: for debug
         random.shuffle(self.paths)
 
         self.transform = transform
@@ -43,13 +48,20 @@ class LungDataset(Dataset):
         good_lung = []
         bad_lung = []
 
+
         for name_file in paths:
+            # if len(good_lung) > self.COUNT_GOOD and len(bad_lung) > self.COUNT_BAD:
+            #     break
+
             mask_path = os.path.join(self.masks_dir, name_file)
             if os.path.isfile(mask_path):
+                    # and len(bad_lung) < self.COUNT_BAD:
                 bad_lung.append(name_file)
                 continue
 
-            good_lung.append(name_file)
+            # # TODO: debug
+            # if not os.path.isfile(mask_path) and len(good_lung) < self.COUNT_GOOD:
+            #     good_lung.append(name_file)
 
         return good_lung, bad_lung
 
@@ -92,7 +104,8 @@ class LungDataset(Dataset):
     def __getitem__(self, ind):
 
         if self.cur_ind == -1:
-            ind_path = ind % self.size
+            # ind_path = ind % self.size
+            ind_path = ind % len(self.paths)
             path = self.paths[ind_path]
             scan, mask = self.get_data(path)
         else:
@@ -101,10 +114,11 @@ class LungDataset(Dataset):
         scan = scan[self.cur_ind]
         mask = mask[self.cur_ind]
 
-        scan = scan - np.mean(scan) / np.std(scan)
+        scan = scan - np.mean(scan) / np.std(scan) # normalize
 
         scan = torch.tensor(scan)
-        mask = torch.tensor(mask)
+        mask = torch.tensor(mask).double()
+
 
         scan = torch.unsqueeze(scan, 0)
         mask = torch.unsqueeze(mask, 0)
